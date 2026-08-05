@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>粤语财经爆款雷达 · 每周复盘</title>
+<link rel="stylesheet" href="site/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>📈</text></svg>">
+</head>
+<body>
+
+<div class="banner" id="demo-banner" hidden>
+  ⚠️ 当前展示的是<strong>演示数据</strong>（标题按真实爆款结构编写，播放/点赞/评论为虚构）。
+  配好 <code>YT_API_KEY</code> 后跑 <code>node scripts/fetch-weekly.mjs</code>，此横幅会自动消失。
+</div>
+
+<header class="top">
+  <div class="wrap">
+    <div class="top-row">
+      <div>
+        <h1>粤语财经爆款雷达<span class="dot">.</span></h1>
+        <p class="sub">每周扫一遍名单里的频道，只留跑出来的，拆它的选题逻辑和爆款逻辑。</p>
+      </div>
+      <div class="meta">
+        周期 <code id="week">—</code><br>
+        生成于 <code id="gen">—</code>
+      </div>
+    </div>
+    <div class="rule" id="thresh"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="warn-slot"></div>
+  <div class="kpis" id="kpis"></div>
+  <nav class="tabs" id="tabs"></nav>
+  <div id="tab-body"></div>
+</main>
+
+<!-- file:// 下 fetch() 会被 CORS 拦掉，所以先用 script 标签把数据挂到 window 上；
+     起了本地服务器的话这个 404 也无所谓，app.js 会回落到 fetch JSON。 -->
+<script src="data/latest.js" onerror="void 0"></script>
+<script src="site/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "_comment": "爆款门槛。三条同时满足才算爆款，用于过滤刷曝光的假量。lookbackDays 是每周采集窗口，baselineCount 是算频道基线中位数用的近期视频条数。",
+  "threshold": {
+    "minViews": 30000,
+    "minComments": 20,
+    "minLikes": 1000
+  },
+  "lookbackDays": 7,
+  "baselineCount": 40,
+  "excludeShorts": false,
+  "weekStartsOn": "monday"
+}

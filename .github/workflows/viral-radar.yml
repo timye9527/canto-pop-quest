@@ -1,0 +1,42 @@
+name: 粤语财经爆款雷达 · 每周采集
+
+on:
+  schedule:
+    # 每周一 09:00 香港时间（UTC+8）= 周一 01:00 UTC
+    - cron: '0 1 * * 1'
+  workflow_dispatch:
+    inputs:
+      days:
+        description: 回看天数
+        required: false
+        default: '7'
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: 采集
+        working-directory: viral-radar
+        env:
+          YT_API_KEY: ${{ secrets.YT_API_KEY }}
+        run: node scripts/fetch-weekly.mjs --days ${{ github.event.inputs.days || '7' }}
+
+      - name: 提交周报
+        run: |
+          git config user.name  "viral-radar-bot"
+          git config user.email "actions@github.com"
+          git add viral-radar/data
+          if git diff --staged --quiet; then
+            echo "本周数据无变化，跳过提交"
+          else
+            git commit -m "chore(viral-radar): 更新每周爆款数据 $(date -u +%Y-%m-%d)"
+            git push
+          fi

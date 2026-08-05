@@ -103,3 +103,7 @@ supabase/user_progress.sql
 ```
 
 核心 React/TypeScript 源码在 `src/App.tsx`、`src/questions.ts`、`src/movieTrainingDay10Questions.ts` 到 `src/movieTrainingDay02Questions.ts`、`src/movieTrainingQuestions.ts`、`src/movieClassicQuestions.ts` 和 `src/styles.css`。
+
+## 附：粤语财经爆款雷达
+
+仓库里另有一个独立子项目 `viral-radar/`，和粤语闯关游戏无关：每周扫一遍名单里的粤语/普通话/英文财经 YouTube 频道，筛出爆款（播放 ≥3w + 评论 ≥20 + 点赞 ≥1k）并拆解选题逻辑与爆款逻辑。用法见 [`viral-radar/README.md`](viral-radar/README.md)。

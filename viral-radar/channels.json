@@ -1,0 +1,38 @@
+{
+  "_comment": "监测名单。tier 决定权重与展示分组；handle 由 fetch-weekly.mjs 自动解析成 channelId。verified=false 表示 handle 由人工推断、尚未跑通 API 校验，解析失败会进 warnings 而不会中断采集。",
+  "channels": [
+    { "handle": "@futuhk", "name": "富途牛牛", "tier": "competitor", "lang": "yue", "subsLabel": "10w+", "verified": true, "note": "直接竞品：栏目设置与玩法可直接借鉴" },
+    { "handle": "@tigerbrokershk", "name": "老虎证券", "tier": "competitor", "lang": "yue", "subsLabel": "2w+", "verified": true, "note": "直接竞品" },
+    { "handle": "@zlglobal_hk", "name": "漲樂全球通 ZL Global", "tier": "competitor", "lang": "yue", "subsLabel": "2w+", "verified": true, "note": "直接竞品（华泰）" },
+    { "handle": "@everbrightsecuritiesintl", "name": "光大证券国际", "tier": "competitor", "lang": "yue", "subsLabel": "2w+", "verified": true, "note": "直接竞品" },
+    { "handle": "@ChiefGroup", "name": "致富 CHIEF", "tier": "competitor", "lang": "yue", "subsLabel": "2w+", "verified": true, "note": "直接竞品" },
+    { "handle": "@vbrokers_app", "name": "華盛证券", "tier": "competitor", "lang": "yue", "subsLabel": "2w+", "verified": true, "note": "直接竞品" },
+
+    { "handle": "@AASTOCKS_AATV", "name": "AASTOCKS 阿斯達克", "tier": "vertical", "lang": "yue", "subsLabel": "10w+", "verified": true, "note": "财经 APP 官方号" },
+    { "handle": "@fmchoyg", "name": "財自FM", "tier": "vertical", "lang": "yue", "subsLabel": "4w+", "verified": true, "note": "2个可爱靓妹人设+综艺感+适度金融专业度，借鉴综艺感" },
+    { "handle": "@Finance730hk", "name": "Finance730", "tier": "vertical", "lang": "yue", "subsLabel": "22.9w+", "verified": true, "note": "am730 旗下：玩梗+够 local+干货+专业度" },
+    { "handle": "@etnethk", "name": "etnet 經濟通", "tier": "vertical", "lang": "yue", "subsLabel": "21w+", "verified": true, "note": "老牌财经媒体" },
+    { "handle": "@RagaFinance", "name": "RagaFinance 財經台", "tier": "vertical", "lang": "yue", "subsLabel": "24w+", "verified": true, "note": "直播/长节目为主，看栏目化" },
+    { "handle": "@Money18-oncc", "name": "Money18（on.cc 東網）", "tier": "vertical", "lang": "yue", "subsLabel": "2w+", "verified": true, "note": "东方报业旗下财经号" },
+    { "handle": "@InvesTalk", "name": "InvesTalk 講投資", "tier": "vertical", "lang": "yue", "subsLabel": "13w+", "verified": true, "note": "" },
+
+    { "handle": "@RainIsHere", "name": "RainIsHere", "tier": "creator", "lang": "yue", "subsLabel": "29.3w+", "verified": true, "note": "美女+前 Banker 人设+专业内容通俗化，封面风格统一" },
+    { "handle": "@30FinancialFreedomByAge30", "name": "30歲財務自由", "tier": "creator", "lang": "yue", "subsLabel": "11w+", "verified": true, "note": "★ 重点对标：大咖策略型账号形式" },
+    { "handle": "@BolooFinance", "name": "菠蘿包工作室 BoLoo Finance", "tier": "creator", "lang": "yue", "subsLabel": "12.5w+", "verified": true, "note": "" },
+    { "handle": "@homilycharthk1998", "name": "Homily小金-投資有道", "tier": "creator", "lang": "yue", "subsLabel": "5w+", "verified": true, "note": "" },
+    { "handle": "@ahju", "name": "阿豬 Ah Ju", "tier": "creator", "lang": "yue", "subsLabel": "4w+", "verified": true, "note": "" },
+    { "handle": "@chartreadercup", "name": "Chart-reader CUP", "tier": "creator", "lang": "yue", "subsLabel": "5w+", "verified": true, "note": "技术分析向" },
+    { "handle": "@conita3706", "name": "熊麗萍 Conita", "tier": "creator", "lang": "yue", "subsLabel": "5w+", "verified": true, "note": "" },
+    { "handle": "@RickyTam", "name": "譚紹興頻道 Ricky Tam", "tier": "creator", "lang": "yue", "subsLabel": "14.7w+", "verified": true, "note": "" },
+
+    { "handle": "@xiao_lin_shuo", "name": "小Lin说", "tier": "mandarin", "lang": "cmn", "subsLabel": "250w+", "verified": true, "note": "中文财经顶流：学霸人设+金融精英+趣味+亲和+专业。借鉴“大白话”的形式" },
+    { "handle": "@ChiefPaPa", "name": "张志云Papa", "tier": "mandarin", "lang": "cmn", "subsLabel": "25w+", "verified": true, "note": "情绪饱满+自媒体玩法成熟（标题党、悬念拉到极致）" },
+    { "handle": "@GiantCutie-CH", "name": "加密大漂亮", "tier": "mandarin", "lang": "cmn", "subsLabel": "12w+", "verified": true, "note": "币圈美女；封面简洁的大字冲击+美女+情绪/表情" },
+
+    { "handle": "@TheDiaryOfACEO", "name": "The Diary Of A CEO", "tier": "podcast", "lang": "en", "subsLabel": "—", "verified": false, "note": "英文顶流访谈：看开场钩子与切片策略" },
+    { "handle": "@allin", "name": "All-In Podcast", "tier": "podcast", "lang": "en", "subsLabel": "—", "verified": false, "note": "英文财经/科技圆桌：看观点冲突结构" },
+    { "handle": "@GrahamStephan", "name": "Graham Stephan", "tier": "podcast", "lang": "en", "subsLabel": "—", "verified": false, "note": "个人理财爆款封面/标题公式教科书" },
+    { "handle": "@CoinBureau", "name": "Coin Bureau", "tier": "podcast", "lang": "en", "subsLabel": "—", "verified": false, "note": "加密垂类头部" },
+    { "handle": "@PBoyle", "name": "Patrick Boyle", "tier": "podcast", "lang": "en", "subsLabel": "—", "verified": false, "note": "金融事件解读，选题跟热点极快" }
+  ]
+}
