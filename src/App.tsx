@@ -15,6 +15,8 @@ import { movieTrainingChapterTitle, movieTrainingQuestions } from './movieTraini
 import { movieChapterTitle, movieQuestions } from './movieQuestions';
 import { chapterTitle, questions as vocabularyQuestions } from './questions';
 import { selfIntroChapterTitle, selfIntroQuestions } from './selfIntroQuestions';
+import StripMode from './StripMode';
+import { getPreferredCantoneseVoice, getVoiceLabel } from './speech';
 import type { AnswerRecord, Chapter, Question } from './types';
 import './styles.css';
 
@@ -507,32 +509,6 @@ function updateWrongBookForAnswer(
   };
 }
 
-function isCantoneseVoice(voice: SpeechSynthesisVoice) {
-  const lang = voice.lang.toLowerCase();
-  const name = voice.name.toLowerCase();
-  return (
-    lang.includes('zh-hk') ||
-    lang.includes('zh_hk') ||
-    lang.includes('yue') ||
-    name.includes('cantonese') ||
-    name.includes('hong kong') ||
-    name.includes('yue')
-  );
-}
-
-function getPreferredCantoneseVoice(voices: SpeechSynthesisVoice[]) {
-  const cantoneseVoices = voices.filter((voice) => isCantoneseVoice(voice));
-  return (
-    cantoneseVoices.find((voice) => voice.name.toLowerCase().includes('sinji')) ||
-    cantoneseVoices.find((voice) => /female|woman|mei|sin|sandy|flo|shelley/i.test(voice.name)) ||
-    cantoneseVoices[0]
-  );
-}
-
-function getVoiceLabel(voice: SpeechSynthesisVoice) {
-  return `${voice.name} ${voice.lang}`.trim();
-}
-
 function speakQuestion(question: Question, setAudioStatus: (message: string) => void) {
   const text = question.spokenText || question.cantoneseText;
   if (!text) {
@@ -570,6 +546,8 @@ function speakQuestion(question: Question, setAudioStatus: (message: string) => 
 
 export default function App() {
   const [phase, setPhase] = useState<Phase>('start');
+  // 题库模式 / 条漫模式；两边存档完全独立，互不影响
+  const [mode, setMode] = useState<'quiz' | 'strips'>('quiz');
   // 默认打开章节列表第一章（最新一章），避免每次加新章都要改这行
   const [selectedChapterId, setSelectedChapterId] = useState(chapters[0].id);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -905,6 +883,10 @@ export default function App() {
     );
   }
 
+  if (mode === 'strips') {
+    return <StripMode onExit={() => setMode('quiz')} />;
+  }
+
   return (
     <StartScreen
       activeChapter={activeChapter}
@@ -913,6 +895,7 @@ export default function App() {
       selectedChapterId={selectedChapterId}
       onSelectChapter={selectChapter}
       onOpenWrongBook={() => setPhase('wrongbook')}
+      onOpenStrips={() => setMode('strips')}
       onResume={resumeDraft}
       onRestart={startGameFresh}
       onStart={startGame}
@@ -927,6 +910,7 @@ function StartScreen({
   selectedChapterId,
   onSelectChapter,
   onOpenWrongBook,
+  onOpenStrips,
   onResume,
   onRestart,
   onStart
@@ -937,6 +921,7 @@ function StartScreen({
   selectedChapterId: string;
   onSelectChapter: (chapterId: string) => void;
   onOpenWrongBook: () => void;
+  onOpenStrips: () => void;
   onResume: () => void;
   onRestart: () => void;
   onStart: () => void;
@@ -987,6 +972,9 @@ function StartScreen({
             )}
             <button className="ghost-button" type="button" onClick={onOpenWrongBook}>
               错题本 {wrongCount}
+            </button>
+            <button className="ghost-button" type="button" onClick={onOpenStrips}>
+              睇条漫 · 唔使刷题
             </button>
             <div className="saved-stat">
               <span>最高分</span>
