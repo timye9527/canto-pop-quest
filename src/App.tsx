@@ -14,6 +14,9 @@ import { movieTrainingDay02ChapterTitle, movieTrainingDay02Questions } from './m
 import { movieTrainingChapterTitle, movieTrainingQuestions } from './movieTrainingQuestions';
 import { movieChapterTitle, movieQuestions } from './movieQuestions';
 import { chapterTitle, questions as vocabularyQuestions } from './questions';
+import { selfIntroChapterTitle, selfIntroQuestions } from './selfIntroQuestions';
+import StripMode from './StripMode';
+import { getPreferredCantoneseVoice, getVoiceLabel } from './speech';
 import type { AnswerRecord, Chapter, Question } from './types';
 import './styles.css';
 
@@ -21,13 +24,24 @@ const STORAGE_KEY = 'canto-pop-quest-progress-v2';
 
 const chapters: Chapter[] = [
   {
+    id: 'self-intro-basic',
+    eyebrow: 'Chapter 16 · 基础词汇 自我介绍',
+    title: selfIntroChapterTitle,
+    description:
+      '40 道自我介绍生存包：姓名称呼、来历住处、职业身份、寒暄场面话，最后 6 题小测试。',
+    questions: selfIntroQuestions,
+    recommended: true,
+    versionLabel: 'v17',
+    tone: '返工第一日、饭局破冰、港式称呼分寸',
+    releaseNote: '新增基础词汇章：自我介绍必备词汇、语序和寒暄，结尾附小测试。'
+  },
+  {
     id: 'movie-training-day-10',
     eyebrow: 'Chapter 15 · 15天训练 Day 10',
     title: movieTrainingDay10ChapterTitle,
     description:
       '50 道蔡澜式人生智慧训练：从饮食、旅行、人情世故和豁达判断里练粤语语感。',
     questions: movieTrainingDay10Questions,
-    recommended: true,
     versionLabel: 'v16',
     tone: '蔡澜、饮食人生、豁达分寸',
     releaseNote: '新增Day10：蔡澜式人生智慧，用饮食和生活态度练粤语判断。'
@@ -204,7 +218,8 @@ const releaseNotes = [
   'v13 15天训练Day07：创世纪式商业谈判，练愿景、风险、承诺和利益交换。',
   'v14 15天训练Day08：新闻女王式职场表达，练事实、立场、话语权和专业边界。',
   'v15 15天训练Day09：周润发经典港片气场，练从容、义气、分寸和场面话。',
-  'v16 15天训练Day10：蔡澜式人生智慧，用饮食、人情和豁达判断练粤语。'
+  'v16 15天训练Day10：蔡澜式人生智慧，用饮食、人情和豁达判断练粤语。',
+  'v17 基础词汇·自我介绍40题：核心词、语序、职场身份和寒暄场面话，结尾6题小测试。'
 ];
 
 type ChapterStats = {
@@ -494,32 +509,6 @@ function updateWrongBookForAnswer(
   };
 }
 
-function isCantoneseVoice(voice: SpeechSynthesisVoice) {
-  const lang = voice.lang.toLowerCase();
-  const name = voice.name.toLowerCase();
-  return (
-    lang.includes('zh-hk') ||
-    lang.includes('zh_hk') ||
-    lang.includes('yue') ||
-    name.includes('cantonese') ||
-    name.includes('hong kong') ||
-    name.includes('yue')
-  );
-}
-
-function getPreferredCantoneseVoice(voices: SpeechSynthesisVoice[]) {
-  const cantoneseVoices = voices.filter((voice) => isCantoneseVoice(voice));
-  return (
-    cantoneseVoices.find((voice) => voice.name.toLowerCase().includes('sinji')) ||
-    cantoneseVoices.find((voice) => /female|woman|mei|sin|sandy|flo|shelley/i.test(voice.name)) ||
-    cantoneseVoices[0]
-  );
-}
-
-function getVoiceLabel(voice: SpeechSynthesisVoice) {
-  return `${voice.name} ${voice.lang}`.trim();
-}
-
 function speakQuestion(question: Question, setAudioStatus: (message: string) => void) {
   const text = question.spokenText || question.cantoneseText;
   if (!text) {
@@ -557,7 +546,10 @@ function speakQuestion(question: Question, setAudioStatus: (message: string) => 
 
 export default function App() {
   const [phase, setPhase] = useState<Phase>('start');
-  const [selectedChapterId, setSelectedChapterId] = useState('movie-training-day-10');
+  // 题库模式 / 条漫模式；两边存档完全独立，互不影响
+  const [mode, setMode] = useState<'quiz' | 'strips'>('quiz');
+  // 默认打开章节列表第一章（最新一章），避免每次加新章都要改这行
+  const [selectedChapterId, setSelectedChapterId] = useState(chapters[0].id);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [answers, setAnswers] = useState<AnswerRecord[]>([]);
@@ -891,6 +883,10 @@ export default function App() {
     );
   }
 
+  if (mode === 'strips') {
+    return <StripMode onExit={() => setMode('quiz')} />;
+  }
+
   return (
     <StartScreen
       activeChapter={activeChapter}
@@ -899,6 +895,7 @@ export default function App() {
       selectedChapterId={selectedChapterId}
       onSelectChapter={selectChapter}
       onOpenWrongBook={() => setPhase('wrongbook')}
+      onOpenStrips={() => setMode('strips')}
       onResume={resumeDraft}
       onRestart={startGameFresh}
       onStart={startGame}
@@ -913,6 +910,7 @@ function StartScreen({
   selectedChapterId,
   onSelectChapter,
   onOpenWrongBook,
+  onOpenStrips,
   onResume,
   onRestart,
   onStart
@@ -923,6 +921,7 @@ function StartScreen({
   selectedChapterId: string;
   onSelectChapter: (chapterId: string) => void;
   onOpenWrongBook: () => void;
+  onOpenStrips: () => void;
   onResume: () => void;
   onRestart: () => void;
   onStart: () => void;
@@ -973,6 +972,9 @@ function StartScreen({
             )}
             <button className="ghost-button" type="button" onClick={onOpenWrongBook}>
               错题本 {wrongCount}
+            </button>
+            <button className="ghost-button" type="button" onClick={onOpenStrips}>
+              睇条漫 · 唔使刷题
             </button>
             <div className="saved-stat">
               <span>最高分</span>
